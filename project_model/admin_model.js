@@ -6,6 +6,10 @@ const adminSchema = mongoose.Schema(
             type: String,
             required: [true, "Please Enter Your name"]
         },
+        user_type: {
+            type:String,
+            required :[true , "Please Enter A user Type"]
+        },
         email:{
             type: String,
             required: [true, "Please Enter Your Email"],
@@ -19,5 +23,5 @@ const adminSchema = mongoose.Schema(
     {timestamps: true}
 )
 
-const Admin = mongoose.model('Admin', adminSchema)
-module.exports = Admin
+const admin = mongoose.model('Admin', adminSchema)
+module.exports = admin

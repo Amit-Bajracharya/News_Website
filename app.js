@@ -1,13 +1,23 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-//const user = require("./project_model/user_model.js");
+
+const admin = require("./project_model/admin_model.js");
 const user_router = require('./routes/userRoutes.js')
+const admin_router = require('./routes/adminRouter.js')
+
+//TO ENCODE JSON FILES
 app.use(express.json());
+
+//TO GET DATA (FORM FORMAT)
 app.use(express.urlencoded());
 
-//ROUTER FOR USER LOGIN
+//ROUTER FOR USER HANDLING
 app.use( '/users/api', user_router)
+
+//ROUTER FOR ADMIN HANDLING
+app.use('/admin/api', admin_router)
+
 
 app.get('/', (req, res)=>{
     app.send("This is homepage")

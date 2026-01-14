@@ -15,6 +15,9 @@ app.use(express.json());
 //TO GET DATA (FORM FORMAT)
 app.use(express.urlencoded({ extended: true }));
 
+//SERVE STATIC FILES (HTML, CSS, JS)
+app.use(express.static('public'));
+
 //ROUTER FOR USER HANDLING
 app.use("/users/api", user_router);
 
@@ -26,9 +29,7 @@ app.use('/news/api', news_router)
 //ROUTER FOR MESSAGE HANDLING
 app.use("/message/api", message_router);
 
-app.get("/", (req, res) => {
-  res.send("This is homepage");
-});
+// Homepage is served from public/index.html
 mongoose
   .connect(
     process.env.DATABASE_URL

@@ -6,6 +6,7 @@ require('dotenv').config()
 const user_router = require("./routes/userRoutes.js");
 const admin_router = require("./routes/adminRouter.js");
 const message_router = require('./routes/messageRouter.js')
+const news_router= require('./routes/news_router.js')
 
 
 //TO ENCODE JSON FILES
@@ -20,7 +21,7 @@ app.use("/users/api", user_router);
 //ROUTER FOR ADMIN HANDLING
 app.use("/admin/api", admin_router);
 
-
+app.use('/news/api', news_router)
 
 //ROUTER FOR MESSAGE HANDLING
 app.use("/message/api", message_router);

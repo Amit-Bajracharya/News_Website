@@ -245,8 +245,18 @@ async function handlePasswordChange(event) {
         return;
     }
     
+    // Set loading state for password form
+    const passwordBtn = document.getElementById('changePasswordBtn');
+    const passwordBtnText = document.getElementById('passwordBtnText');
+    const passwordSpinner = document.getElementById('passwordLoadingSpinner');
+    
+    passwordBtn.disabled = true;
+    passwordBtnText.style.display = 'none';
+    passwordSpinner.style.display = 'block';
+    
     try {
-        const response = await fetch(API_BASE + '/users/api/change-password', {
+        const userId = profileState.currentUser.id || profileState.currentUser._id;
+        const response = await fetch(API_BASE + `/users/api/change-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -254,7 +264,7 @@ async function handlePasswordChange(event) {
             body: JSON.stringify({
                 currentPassword,
                 newPassword,
-                userId: profileState.currentUser.id || profileState.currentUser._id
+                userId
             })
         });
         
@@ -273,6 +283,11 @@ async function handlePasswordChange(event) {
     } catch (error) {
         console.error('Password change error:', error);
         showMessage('Network error. Please try again later.', 'error');
+    } finally {
+        // Reset loading state
+        passwordBtn.disabled = false;
+        passwordBtnText.style.display = 'inline';
+        passwordSpinner.style.display = 'none';
     }
 }
 
@@ -291,6 +306,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileForm = document.getElementById('profileForm');
     if (profileForm) {
         profileForm.addEventListener('submit', handleProfileUpdate);
+    }
+    
+    // Setup password form submission
+    const passwordForm = document.getElementById('passwordForm');
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', handlePasswordChange);
     }
     
     // Add nice animation on load

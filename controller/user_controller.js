@@ -169,4 +169,54 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { getUserById, addUser, deleteUser, updateUser, getAllUser, loginUser, upload };
+//CHANGE PASSWORD
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, userId } = req.body;
+    
+    if (!currentPassword || !newPassword || !userId) {
+      return res
+        .status(400)
+        .json({ successful: false, message: "All fields are required" });
+    }
+    
+    if (newPassword.length < 6) {
+      return res
+        .status(400)
+        .json({ successful: false, message: "New password must be at least 6 characters long" });
+    }
+    
+    // Find the user
+    const userRecord = await user.findById(userId);
+    if (!userRecord) {
+      return res
+        .status(404)
+        .json({ successful: false, message: "User not found" });
+    }
+    
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, userRecord.password);
+    if (!isCurrentPasswordValid) {
+      return res
+        .status(400)
+        .json({ successful: false, message: "Current password is incorrect" });
+    }
+    
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+    
+    // Update the password
+    await user.findByIdAndUpdate(userId, { password: hashedNewPassword });
+    
+    return res
+      .status(200)
+      .json({ successful: true, message: "Password changed successfully" });
+      
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ successful: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { getUserById, addUser, deleteUser, updateUser, getAllUser, loginUser, upload, changePassword };

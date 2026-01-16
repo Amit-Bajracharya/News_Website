@@ -7,7 +7,8 @@ const {
   updateUser,
   getAllUser,
   loginUser,
-  upload
+  upload,
+  changePassword
 } = require("../controller/user_controller.js");
 
 //LOGIN USER
@@ -27,5 +28,8 @@ user_router.put("/:id", upload.single('image'), updateUser);
 
 //DELETE USER
 user_router.delete("/:id", deleteUser);
+
+//CHANGE PASSWORD
+user_router.post('/change-password', changePassword);
 
 module.exports = user_router;

@@ -29,6 +29,16 @@ app.use('/news/api', news_router)
 //ROUTER FOR MESSAGE HANDLING
 app.use("/message/api", message_router);
 
+// Health check endpoint for Docker
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Homepage is served from public/index.html
 mongoose
   .connect(
